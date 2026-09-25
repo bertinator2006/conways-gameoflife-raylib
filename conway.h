@@ -3,10 +3,13 @@
 typedef struct game *Game;
 
 Game init_game(int height, int width, bool *grid_data);
+Game init_game_file(char *file_path);
 void destroy_game(Game g);
 
+int get_game_width(Game g);
+int get_game_height(Game g);
+
 void next_frame(Game g);
-void load_game_from_file(Game g, char *file_path);
 
 
 // to get the state of a cell:

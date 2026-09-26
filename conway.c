@@ -108,13 +108,13 @@ Game init_game_file(char *file_path)
     g->width = width;
     g->height = height;
     g->grid = calloc(width * height, sizeof(uint8_t));
-    if (!g->grid)
+    if (!(g->grid))
     {
         fprintf(stderr, "calloc failed for uint8_t grid in conway.\n");
         exit(EXIT_FAILURE);
     }
     g->public_grid = calloc(width * height, sizeof(bool));
-    if (!g->public_grid)
+    if (!(g->public_grid))
     {
         fprintf(stderr, "calloc failed for uint8_t grid in conway.\n");
         exit(EXIT_FAILURE);
@@ -135,7 +135,7 @@ Game init_game_file(char *file_path)
 void destroy_game(Game g)
 {
     free(g->grid);
-    if (!g->caller_owned_public_grid) free(g->public_grid);
+    if (!(g->caller_owned_public_grid)) free(g->public_grid);
     free(g);
 }
 

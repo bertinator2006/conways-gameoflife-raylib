@@ -7,9 +7,45 @@
 #define CELL_SIZE_PX 10
 
 static void draw_grid(bool *grid, int width, int height);
+static int run_default_game(void);
 static inline void draw_cell(int x, int y);
 
-int main(void)
+int main(int argc, char *argv[])
+{
+    if (argc == 1)
+    {
+        run_default_game();
+        return 0;
+    }
+
+    Game game = init_game_file(argv[1]);
+    destroy_game(game);
+    return 0;
+}
+
+static void draw_grid(bool *grid, int width, int height)
+{
+    ClearBackground(WHITE);
+    int i = 0;
+    for (int y = 0; y < height; y++)
+    {
+        for (int x = 0; x < width; x++)
+        {
+            if (grid[i])
+            {
+                draw_cell(x, y);
+            }
+            i++;
+        }
+    }
+}
+
+static inline void draw_cell(int x, int y)
+{
+    DrawRectangle(x * CELL_SIZE_PX, y * CELL_SIZE_PX, CELL_SIZE_PX, CELL_SIZE_PX, BLACK);
+}
+
+static int run_default_game(void)
 {
     const int game_width = 80;
     const int game_height = 80;
@@ -52,29 +88,8 @@ int main(void)
         next_frame(game);
     }
 
+    free(grid);
+    destroy_game(game);
     return 0;
 }
-
-static void draw_grid(bool *grid, int width, int height)
-{
-    ClearBackground(WHITE);
-    int i = 0;
-    for (int y = 0; y < height; y++)
-    {
-        for (int x = 0; x < width; x++)
-        {
-            if (grid[i])
-            {
-                draw_cell(x, y);
-            }
-            i++;
-        }
-    }
-}
-
-static inline void draw_cell(int x, int y)
-{
-    DrawRectangle(x * CELL_SIZE_PX, y * CELL_SIZE_PX, CELL_SIZE_PX, CELL_SIZE_PX, BLACK);
-}
-
 

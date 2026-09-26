@@ -130,6 +130,8 @@ Game init_game_file(char *file_path)
             turn_cell_on(g, y * width + x);
         }
     }
+
+    return g;
 }
 
 void destroy_game(Game g)

@@ -44,12 +44,6 @@ Game init_game(int height, int width, bool *grid_data)
         }
     }
 
-    // turn_cell_on(g, width + 3);
-    // turn_cell_on(g, 2 * width + 4);
-    // turn_cell_on(g, 3 * width + 2);
-    // turn_cell_on(g, 3 * width + 3);
-    // turn_cell_on(g, 3 * width + 4);
-
     return g;
 }
 
@@ -73,14 +67,25 @@ Game init_game_file(char *file_path)
     char *ret = fgets(2048, buffer, game_file);
     if (ret == NULL)
     {
-        fprintf(stderr, "errno: %i.\n", errno);
+  //      fprintf(stderr, "errno: %i.\n", errno);
         exit(EXIT_FAILURE);
     }
 
+    // width calculations
+    int width = 0;
     for (int i = 0; buffer[i] != '\n' && buffer[i] != '\0'; i++)
     {
-        if (buffer(i))
+        width++;
     }
+    if (!width)
+    {
+        g->width = 0;
+        g->height = 0;
+        g->grid = NULL;
+        g->public_grid = NULL;
+    }
+    rewind(game_file);
+
 }
 
 void destroy_game(Game g)
@@ -97,6 +102,11 @@ int get_game_width(Game g)
 int get_game_height(Game g)
 {
     return g->height;
+}
+
+bool *get_game_grid(Game g)
+{
+    return g->public_grid;
 }
 
 void next_frame(Game g)

@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "conway.h"
 
 #define CELL_MASK 0x80
@@ -13,6 +14,7 @@ struct game
     int width;
     uint8_t *grid;
     bool *public_grid;
+    bool caller_owned_public_grid;
 };
 
 struct vector {
@@ -25,6 +27,7 @@ static void decrement_neighbours(Game g, int index);
 static void change_neighbours(Game g, int index, int dx);
 static void turn_cell_on(Game g, int i);
 static void turn_cell_off(Game g, int i);
+static void strip_newline(char *buf);
 
 
 Game init_game(int height, int width, bool *grid_data)
@@ -34,6 +37,7 @@ Game init_game(int height, int width, bool *grid_data)
     g->height = height;
     g->width = width;
     g->public_grid = grid_data;
+    g->caller_owned_public_grid = true;
 
     // we load the public_grid data
     for (int i = 0; i < width * height; i++)
@@ -64,10 +68,10 @@ Game init_game_file(char *file_path)
     }
 
     char buffer[2048];
-    char *ret = fgets(2048, buffer, game_file);
+    char *ret = fgets(buffer, 2048, game_file);
     if (ret == NULL)
     {
-  //      fprintf(stderr, "errno: %i.\n", errno);
+        fprintf(stderr, "Couldn't get first line of file during initialisation.\n");
         exit(EXIT_FAILURE);
     }
 
@@ -77,20 +81,61 @@ Game init_game_file(char *file_path)
     {
         width++;
     }
+
     if (!width)
     {
         g->width = 0;
         g->height = 0;
         g->grid = NULL;
         g->public_grid = NULL;
+        g->caller_owned_public_grid = false;
     }
+
     rewind(game_file);
 
+    int height = 0;
+    while (fgets(buffer, 2048, game_file))
+    {
+        strip_newline(buffer);
+        if (strlen(buffer) != width)
+        {
+            fprintf(stderr, "Inconsistent grid width found in file duiring initialisation.\n");
+            exit(EXIT_FAILURE);
+        }
+        height++;
+    }
+
+    g->width = width;
+    g->height = height;
+    g->grid = calloc(width * height, uint8_t);
+    if (!g->grid)
+    {
+        fprintf("calloc failed for uint8_t grid in conway.\n");
+        exit(EXIT_FAILURE);
+    }
+    g->public_grid = calloc(width * height, bool);
+    if (!g->public_grid)
+    {
+        fprintf("calloc failed for uint8_t grid in conway.\n");
+        exit(EXIT_FAILURE);
+    }
+    g->caller_owned_public_grid = false;
+
+    rewind(game_file);
+    for (int i = 0; i < height; i++)
+    {
+        fgets(buffer, 2048, game_file);
+        for (int x = 0; x < width; x++)
+        {
+            turn_cell_on(g, y * width + x);
+        }
+    }
 }
 
 void destroy_game(Game g)
 {
     free(g->grid);
+    if (!g->caller_owned_public_grid) free(g->public_grid);
     free(g);
 }
 
@@ -144,6 +189,18 @@ void next_frame(Game g)
         {
             grid[i] &= COUNT_MASK;
             decrement_neighbours(g, i);
+        }
+    }
+}
+
+static void strip_newline(char *str)
+{
+    for (int i = 0; str[i] != '\0')
+    {
+        if (str[i] == '\n')
+        {
+            str[i] = '\0';
+            return;
         }
     }
 }

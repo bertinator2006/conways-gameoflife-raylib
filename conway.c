@@ -44,11 +44,11 @@ Game init_game(int height, int width, bool *grid_data)
         }
     }
 
-//     turn_cell_on(g, 80 + 3);
-//     turn_cell_on(g, 2 * 80 + 4);
-//     turn_cell_on(g, 3 * 80 + 2);
-//     turn_cell_on(g, 3 * 80 + 3);
-//     turn_cell_on(g, 3 * 80 + 4);
+    // turn_cell_on(g, width + 3);
+    // turn_cell_on(g, 2 * width + 4);
+    // turn_cell_on(g, 3 * width + 2);
+    // turn_cell_on(g, 3 * width + 3);
+    // turn_cell_on(g, 3 * width + 4);
 
     return g;
 }
@@ -59,7 +59,27 @@ Game init_game_file(char *file_path)
     if (!game_file)
     {
         fprintf(stderr, "Error opening file: %s\n", file_path);
-        return NULL;
+        exit(EXIT_FAILURE);
+    }
+
+    Game g = malloc(sizeof(struct game));
+    if (!g)
+    {
+        fprintf(stderr, "Error allocating memory for game.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    char buffer[2048];
+    char *ret = fgets(2048, buffer, game_file);
+    if (ret == NULL)
+    {
+        fprintf(stderr, "errno: %i.\n", errno);
+        exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; buffer[i] != '\n' && buffer[i] != '\0'; i++)
+    {
+        if (buffer(i))
     }
 }
 

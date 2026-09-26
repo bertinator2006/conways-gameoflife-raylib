@@ -8,6 +8,7 @@ void destroy_game(Game g);
 
 int get_game_width(Game g);
 int get_game_height(Game g);
+bool *get_game_grid(Game g);
 
 void next_frame(Game g);
 

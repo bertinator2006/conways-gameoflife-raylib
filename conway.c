@@ -53,10 +53,30 @@ Game init_game(int height, int width, bool *grid_data)
     return g;
 }
 
+Game init_game_file(char *file_path)
+{
+    FILE *game_file = fopen(file_path, "r");
+    if (!game_file)
+    {
+        fprintf(stderr, "Error opening file: %s\n", file_path);
+        return NULL;
+    }
+}
+
 void destroy_game(Game g)
 {
     free(g->grid);
     free(g);
+}
+
+int get_game_width(Game g)
+{
+    return g->width;
+}
+
+int get_game_height(Game g)
+{
+    return g->height;
 }
 
 void next_frame(Game g)
@@ -96,11 +116,6 @@ void next_frame(Game g)
             decrement_neighbours(g, i);
         }
     }
-}
-
-void load_game_from_file(Game g, char *file_path)
-{
-    // TODO
 }
 
 static void turn_cell_off(Game g, int i)

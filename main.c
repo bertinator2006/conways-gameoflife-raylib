@@ -20,6 +20,11 @@ int main(void)
     InitWindow(screen_width, screen_height, "Conway's Game of Life");
 
     bool *grid = calloc(game_width * game_height, sizeof(bool));
+    if (!grid)
+    {
+        fprintf(stderr, "Error initiliasing grid.\n");
+        return 1;
+    }
 
     grid[83] = true;
     grid[164] = true;
@@ -28,13 +33,16 @@ int main(void)
     grid[244] = true;
 
     Game game = init_game(game_width, game_height, grid);
-
+    if (!game)
+    {
+        fprintf(stderr, "Error initiallising game.\n");
+        return 1;
+    }
 
     SetTargetFPS(10);
 
     while (!WindowShouldClose())
     {
-
         BeginDrawing();
         {
             ClearBackground(WHITE);

@@ -107,22 +107,22 @@ Game init_game_file(char *file_path)
 
     g->width = width;
     g->height = height;
-    g->grid = calloc(width * height, uint8_t);
+    g->grid = calloc(width * height, sizeof(uint8_t));
     if (!g->grid)
     {
-        fprintf("calloc failed for uint8_t grid in conway.\n");
+        fprintf(stderr, "calloc failed for uint8_t grid in conway.\n");
         exit(EXIT_FAILURE);
     }
-    g->public_grid = calloc(width * height, bool);
+    g->public_grid = calloc(width * height, sizeof(bool));
     if (!g->public_grid)
     {
-        fprintf("calloc failed for uint8_t grid in conway.\n");
+        fprintf(stderr, "calloc failed for uint8_t grid in conway.\n");
         exit(EXIT_FAILURE);
     }
     g->caller_owned_public_grid = false;
 
     rewind(game_file);
-    for (int i = 0; i < height; i++)
+    for (int y = 0; y < height; y++)
     {
         fgets(buffer, 2048, game_file);
         for (int x = 0; x < width; x++)
@@ -195,7 +195,7 @@ void next_frame(Game g)
 
 static void strip_newline(char *str)
 {
-    for (int i = 0; str[i] != '\0')
+    for (int i = 0; str[i] != '\0'; i++)
     {
         if (str[i] == '\n')
         {

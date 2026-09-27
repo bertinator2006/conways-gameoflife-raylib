@@ -41,6 +41,7 @@ int main(int argc, char *argv[])
         fprintf(stderr, "\t./create [square_length]\n");
         exit(EXIT_FAILURE);
     }
+
     if (argc == 2)
     {
         file = fopen("test.txt", "w");

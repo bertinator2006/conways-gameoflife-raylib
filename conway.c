@@ -127,7 +127,7 @@ Game init_game_file(char *file_path)
         fgets(buffer, 2048, game_file);
         for (int x = 0; x < width; x++)
         {
-            turn_cell_on(g, y * width + x);
+            if (buffer[x] == '1') turn_cell_on(g, y * width + x);
         }
     }
 

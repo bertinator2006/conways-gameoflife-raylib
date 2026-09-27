@@ -19,8 +19,8 @@ int main(int argc, char *argv[])
 
     if (argc == 1)
     {
-        game_width = 80;
-        game_height = 80;
+        game_width = 10;
+        game_height = 10;
         grid = calloc(game_width * game_height, sizeof(bool));
         if (!grid)
         {
@@ -28,11 +28,11 @@ int main(int argc, char *argv[])
             return 1;
         }
 
-        grid[83] = true;
-        grid[164] = true;
-        grid[242] = true;
-        grid[243] = true;
-        grid[244] = true;
+        grid[game_width + 1] = true;
+        grid[2 * game_width + 2] = true;
+        grid[3 * game_width] = true;
+        grid[3 * game_width + 1] = true;
+        grid[3 * game_width + 2] = true;
 
         game = init_game(game_width, game_height, grid);
         if (!game)

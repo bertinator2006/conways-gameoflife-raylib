@@ -61,17 +61,17 @@ int main(int argc, char *argv[])
         }
     }
 
-    // int screen_width = game_width * cell_size_px;
-    // int screen_height = game_height * cell_size_px;
-    int screen_width = 1 + game_width + game_width * cell_size_px;
-    int screen_height = 1 + game_height + game_height * cell_size_px;
+    int screen_width = game_width * cell_size_px;
+    int screen_height = game_height * cell_size_px;
+    // int screen_width = 1 + game_width + game_width * cell_size_px;
+    // int screen_height = 1 + game_height + game_height * cell_size_px;
 
     SetTraceLogLevel(LOG_NONE);
     InitWindow(screen_width, screen_height, "Conway's Game of Life");
 
     float frame_times[256];
     int frame_i = 0;
-    SetTargetFPS(180);
+    SetTargetFPS(10);
 
     while (!WindowShouldClose())
     {

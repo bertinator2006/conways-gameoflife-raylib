@@ -29,21 +29,51 @@ static void append_char(char *buffer, char c);
 int main(int argc, char *argv[])
 {
     int cell_size_px = 20;
-    if (argc != 4)
+    int game_width;
+    int game_height;
+    FILE *file;
+
+    if (argc < 2 || argc > 4)
     {
-        fprintf(stderr, "Usage:\n\t./create [filename.txt] [width] [height]\n");
+        fprintf(stderr, "Usage:\n");
+        fprintf(stderr, "\t./create [filename.txt] [width] [height]\n");
+        fprintf(stderr, "\t./create [width] [height]\n");
+        fprintf(stderr, "\t./create [square_length]\n");
         exit(EXIT_FAILURE);
     }
-
-    FILE *file = fopen(argv[1], "w");
-    if (!file)
+    if (argc == 2)
     {
-        fprintf(stderr, "Failed to open file: %s\n", argv[1]);
-        exit(EXIT_FAILURE);
+        file = fopen("test.txt", "w");
+        if (!file)
+        {
+            fprintf(stderr, "File: test.txt unable to be open.\n");
+            exit(EXIT_FAILURE);
+        }
+        game_width = atoi(argv[1]);
+        game_height = atoi(argv[1]);
     }
-
-    int game_width = atoi(argv[2]);
-    int game_height = atoi(argv[3]);
+    else if (argc == 3)
+    {
+        file = fopen("test.txt", "w");
+        if (!file)
+        {
+            fprintf(stderr, "File: test.txt unable to be open.\n");
+            exit(EXIT_FAILURE);
+        }
+        game_width = atoi(argv[1]);
+        game_height = atoi(argv[2]);
+    }
+    else if (argc == 4)
+    {
+        file = fopen(argv[1], "w");
+        if (!file)
+        {
+            fprintf(stderr, "File: test.txt unable to be open.\n");
+            exit(EXIT_FAILURE);
+        }
+        game_width = atoi(argv[2]);
+        game_height = atoi(argv[3]);
+    }
 
     bool *grid = calloc(game_width * game_height, sizeof(bool));
     int screen_width = game_width * (cell_size_px + 1) + 1;

@@ -4,10 +4,9 @@
 #include <raylib.h>
 #include "conway.h"
 
-#define CELL_SIZE_PX 10
 
-static void draw_grid(bool *grid, int width, int height);
-static inline void draw_cell(int x, int y);
+static void draw_grid(bool *grid, int width, int height, int cell_size_px);
+static inline void draw_cell(int x, int y, int cell_size_px);
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +15,7 @@ int main(int argc, char *argv[])
 
     int game_width;
     int game_height;
+    int cell_size_px = 50;
 
     if (argc == 1)
     {
@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
         if (!grid)
         {
             fprintf(stderr, "Error initiliasing grid.\n");
-            return 1;
+            exit(EXIT_FAILURE);
         }
 
         grid[game_width + 1] = true;
@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
             exit(EXIT_FAILURE);
         }
     }
-    else if (argc == 2)
+    else if (argc == 2 || argc == 3)
     {
         game = init_game_file(argv[1]);
         if (!game)
@@ -52,10 +52,15 @@ int main(int argc, char *argv[])
         game_width = get_game_width(game);
         game_height = get_game_height(game);
         grid = get_game_grid(game);
+
+        if (argc == 3)
+        {
+            cell_size_px = atoi(argv[2]);
+        }
     }
 
-    int screen_width = game_width * CELL_SIZE_PX;
-    int screen_height = game_height * CELL_SIZE_PX;
+    int screen_width = game_width * cell_size_px;
+    int screen_height = game_height * cell_size_px;
 
     InitWindow(screen_width, screen_height, "Conway's Game of Life");
 
@@ -66,7 +71,7 @@ int main(int argc, char *argv[])
         BeginDrawing();
         {
             ClearBackground(WHITE);
-            draw_grid(grid, game_width, game_height);
+            draw_grid(grid, game_width, game_height, cell_size_px);
         }
         EndDrawing();
         next_frame(game);
@@ -77,7 +82,7 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-static void draw_grid(bool *grid, int width, int height)
+static void draw_grid(bool *grid, int width, int height, int cell_size_px)
 {
     ClearBackground(WHITE);
     int i = 0;
@@ -87,15 +92,15 @@ static void draw_grid(bool *grid, int width, int height)
         {
             if (grid[i])
             {
-                draw_cell(x, y);
+                draw_cell(x, y, cell_size_px);
             }
             i++;
         }
     }
 }
 
-static inline void draw_cell(int x, int y)
+static inline void draw_cell(int x, int y, int cell_size_px)
 {
-    DrawRectangle(x * CELL_SIZE_PX, y * CELL_SIZE_PX, CELL_SIZE_PX, CELL_SIZE_PX, BLACK);
+    DrawRectangle(x * cell_size_px, y * cell_size_px, cell_size_px, cell_size_px, BLACK);
 }
 

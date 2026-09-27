@@ -5,11 +5,13 @@
 #include "conway.h"
 #include "draw.h"
 
+static float average_float(float values[], int n);
 
 int main(int argc, char *argv[])
 {
     Game game;
     bool *grid;
+    bool grid_freed = true;
 
     int game_width;
     int game_height;
@@ -20,6 +22,8 @@ int main(int argc, char *argv[])
         game_width = 10;
         game_height = 10;
         grid = calloc(game_width * game_height, sizeof(bool));
+        grid_freed = false;
+
         if (!grid)
         {
             fprintf(stderr, "Error initiliasing grid.\n");
@@ -57,27 +61,47 @@ int main(int argc, char *argv[])
         }
     }
 
+    // int screen_width = game_width * cell_size_px;
+    // int screen_height = game_height * cell_size_px;
     int screen_width = 1 + game_width + game_width * cell_size_px;
     int screen_height = 1 + game_height + game_height * cell_size_px;
 
+    SetTraceLogLevel(LOG_NONE);
     InitWindow(screen_width, screen_height, "Conway's Game of Life");
 
-    SetTargetFPS(10);
+    float frame_times[256];
+    int frame_i = 0;
+    SetTargetFPS(180);
 
     while (!WindowShouldClose())
     {
+        frame_times[frame_i] = GetFrameTime();
+        frame_i = (++frame_i) % 256;
+
         BeginDrawing();
         {
             ClearBackground(WHITE);
-            draw_grid_with_borders(grid, game_width, game_height, cell_size_px);
+            draw_grid(grid, game_width, game_height, cell_size_px);
         }
         EndDrawing();
         next_frame(game);
     }
 
+    printf("average frametime: %f\n", average_float(frame_times, 256));
     CloseWindow();
-    free(grid);
+    if (!grid_freed) free(grid);
     destroy_game(game);
     return 0;
+}
+
+static float average_float(float values[], int n)
+{
+    float total = 0.0f;
+    for (int i = 0; i < n; i++)
+    {
+        total += values[i];
+    }
+
+    return total / (float) n;
 }
 

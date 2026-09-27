@@ -28,7 +28,7 @@ static void append_char(char *buffer, char c);
 
 int main(int argc, char *argv[])
 {
-    int cell_size_px = 20;
+    int cell_size_px = 5;
     int game_width;
     int game_height;
     FILE *file;
@@ -91,6 +91,7 @@ int main(int argc, char *argv[])
 
     Pos cell;
 
+    SetTraceLogLevel(LOG_NONE);
     InitWindow(screen_width, screen_height, "Create Conway Gamefile");
     SetTargetFPS(180);
     while (!WindowShouldClose())

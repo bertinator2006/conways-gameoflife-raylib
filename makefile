@@ -1,14 +1,11 @@
-debug_create:
-	gcc create.c draw.c -o create -lraylib -fsanitize=address -g
-
-debug_conway:
-	gcc main.c conway.c draw.c -o conway -lraylib -fsanitize=address -g
+all: conway create
 
 create:
-	gcc create.c draw.c -o create -lraylib
+	gcc create.c draw.c -o create -lraylib -fsanitize=address -g
 
 conway:
-	gcc main.c conway.c draw.c -o conway -lraylib
+	gcc main.c conway.c draw.c -o conway -lraylib -fsanitize=address -g
 
-all: conway create
+clean:
+	rm conway create
 

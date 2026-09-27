@@ -1,3 +1,5 @@
+#ifndef CONWAY_H
+#define CONWAY_H
 #include <stdbool.h>
 
 typedef struct game *Game;
@@ -16,4 +18,6 @@ void next_frame(Game g);
 // to get the state of a cell:
 //     check grid_data[y * width + x];
 // NOTE: you must store grid data yourself
+
+#endif
 

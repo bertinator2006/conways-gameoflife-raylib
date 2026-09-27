@@ -7,18 +7,72 @@
 #define CELL_SIZE_PX 10
 
 static void draw_grid(bool *grid, int width, int height);
-static int run_default_game(void);
 static inline void draw_cell(int x, int y);
 
 int main(int argc, char *argv[])
 {
+    Game game;
+    bool *grid;
+
+    int game_width;
+    int game_height;
+
     if (argc == 1)
     {
-        run_default_game();
-        return 0;
+        game_width = 80;
+        game_height = 80;
+        grid = calloc(game_width * game_height, sizeof(bool));
+        if (!grid)
+        {
+            fprintf(stderr, "Error initiliasing grid.\n");
+            return 1;
+        }
+
+        grid[83] = true;
+        grid[164] = true;
+        grid[242] = true;
+        grid[243] = true;
+        grid[244] = true;
+
+        game = init_game(game_width, game_height, grid);
+        if (!game)
+        {
+            fprintf(stderr, "Error initiallising game.\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+    else if (argc == 2)
+    {
+        game = init_game_file(argv[1]);
+        if (!game)
+        {
+            fprintf(stderr, "Error initiallising game.\n");
+            exit(EXIT_FAILURE);
+        }
+        game_width = get_game_width(game);
+        game_height = get_game_height(game);
+        grid = get_game_grid(game);
     }
 
-    Game game = init_game_file(argv[1]);
+    int screen_width = game_width * CELL_SIZE_PX;
+    int screen_height = game_height * CELL_SIZE_PX;
+
+    InitWindow(screen_width, screen_height, "Conway's Game of Life");
+
+    SetTargetFPS(10);
+
+    while (!WindowShouldClose())
+    {
+        BeginDrawing();
+        {
+            ClearBackground(WHITE);
+            draw_grid(grid, game_width, game_height);
+        }
+        EndDrawing();
+        next_frame(game);
+    }
+
+    free(grid);
     destroy_game(game);
     return 0;
 }
@@ -43,53 +97,5 @@ static void draw_grid(bool *grid, int width, int height)
 static inline void draw_cell(int x, int y)
 {
     DrawRectangle(x * CELL_SIZE_PX, y * CELL_SIZE_PX, CELL_SIZE_PX, CELL_SIZE_PX, BLACK);
-}
-
-static int run_default_game(void)
-{
-    const int game_width = 80;
-    const int game_height = 80;
-
-    const int screen_width = game_width * CELL_SIZE_PX;
-    const int screen_height = game_height * CELL_SIZE_PX;
-
-    InitWindow(screen_width, screen_height, "Conway's Game of Life");
-
-    bool *grid = calloc(game_width * game_height, sizeof(bool));
-    if (!grid)
-    {
-        fprintf(stderr, "Error initiliasing grid.\n");
-        return 1;
-    }
-
-    grid[83] = true;
-    grid[164] = true;
-    grid[242] = true;
-    grid[243] = true;
-    grid[244] = true;
-
-    Game game = init_game(game_width, game_height, grid);
-    if (!game)
-    {
-        fprintf(stderr, "Error initiallising game.\n");
-        return 1;
-    }
-
-    SetTargetFPS(10);
-
-    while (!WindowShouldClose())
-    {
-        BeginDrawing();
-        {
-            ClearBackground(WHITE);
-            draw_grid(grid, game_width, game_height);
-        }
-        EndDrawing();
-        next_frame(game);
-    }
-
-    free(grid);
-    destroy_game(game);
-    return 0;
 }
 

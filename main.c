@@ -3,10 +3,8 @@
 #include <stdlib.h>
 #include <raylib.h>
 #include "conway.h"
+#include "draw.h"
 
-
-static void draw_grid(bool *grid, int width, int height, int cell_size_px);
-static inline void draw_cell(int x, int y, int cell_size_px);
 
 int main(int argc, char *argv[])
 {
@@ -59,8 +57,8 @@ int main(int argc, char *argv[])
         }
     }
 
-    int screen_width = game_width * cell_size_px;
-    int screen_height = game_height * cell_size_px;
+    int screen_width = 1 + game_width + game_width * cell_size_px;
+    int screen_height = 1 + game_height + game_height * cell_size_px;
 
     InitWindow(screen_width, screen_height, "Conway's Game of Life");
 
@@ -71,7 +69,7 @@ int main(int argc, char *argv[])
         BeginDrawing();
         {
             ClearBackground(WHITE);
-            draw_grid(grid, game_width, game_height, cell_size_px);
+            draw_grid_with_borders(grid, game_width, game_height, cell_size_px);
         }
         EndDrawing();
         next_frame(game);
@@ -80,27 +78,5 @@ int main(int argc, char *argv[])
     free(grid);
     destroy_game(game);
     return 0;
-}
-
-static void draw_grid(bool *grid, int width, int height, int cell_size_px)
-{
-    ClearBackground(WHITE);
-    int i = 0;
-    for (int y = 0; y < height; y++)
-    {
-        for (int x = 0; x < width; x++)
-        {
-            if (grid[i])
-            {
-                draw_cell(x, y, cell_size_px);
-            }
-            i++;
-        }
-    }
-}
-
-static inline void draw_cell(int x, int y, int cell_size_px)
-{
-    DrawRectangle(x * cell_size_px, y * cell_size_px, cell_size_px, cell_size_px, BLACK);
 }
 

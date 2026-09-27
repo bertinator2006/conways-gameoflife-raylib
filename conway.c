@@ -122,12 +122,14 @@ Game init_game_file(char *file_path)
     g->caller_owned_public_grid = false;
 
     rewind(game_file);
+    int i = 0;
     for (int y = 0; y < height; y++)
     {
         fgets(buffer, 2048, game_file);
         for (int x = 0; x < width; x++)
         {
-            if (buffer[x] == '1') turn_cell_on(g, y * width + x);
+            if (buffer[x] == '1') turn_cell_on(g, i);
+            i++;
         }
     }
 

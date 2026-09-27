@@ -75,6 +75,7 @@ int main(int argc, char *argv[])
         next_frame(game);
     }
 
+    CloseWindow();
     free(grid);
     destroy_game(game);
     return 0;

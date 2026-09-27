@@ -9,7 +9,6 @@ static void draw_horizontal_line(int y, int width);
 
 void draw_grid(bool *grid, int width, int height, int cell_size_px)
 {
-    ClearBackground(WHITE);
     int i = 0;
     for (int y = 0; y < height; y++)
     {
@@ -26,7 +25,6 @@ void draw_grid(bool *grid, int width, int height, int cell_size_px)
 
 void draw_grid_with_borders(bool *grid, int width, int height, int cell_size_px)
 {
-    ClearBackground(WHITE);
     int i = 0;
     for (int y = 0; y < height; y++)
     {

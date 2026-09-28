@@ -17,6 +17,11 @@ int main(int argc, char *argv[])
     int game_height;
     int cell_size_px = 50;
 
+    char buffer[256];
+    printf("Target FPS: ");
+    fgets(buffer, 255, stdin);
+    int target_FPS = atoi(buffer);
+
     if (argc == 1)
     {
         game_width = 10;
@@ -76,14 +81,13 @@ int main(int argc, char *argv[])
 
     float frame_times[256];
     int frame_i = 0;
-    char buffer[256];
-    printf("Target FPS: ");
-    fgets(buffer, 255, stdin);
-    SetTargetFPS(atoi(buffer));
+    bool max_reached = false;
+    SetTargetFPS(target_FPS);
 
     while (!WindowShouldClose())
     {
         frame_times[frame_i] = GetFrameTime();
+        max_reached = (frame_i == 255) || max_reached;
         frame_i = (frame_i + 1) % 256;
 
         if (IsKeyDown(KEY_SPACE)) next_frame(game);
@@ -96,7 +100,11 @@ int main(int argc, char *argv[])
         EndDrawing();
     }
 
-    printf("average frametime: %f\n", average_float(frame_times, 256));
+    if (max_reached)
+    {
+        // printf("average frametime: %f\n", average_float(frame_times, 256));
+        printf("average FPS: %f\n", 1 / average_float(frame_times, 256));
+    }
     CloseWindow();
     if (!grid_freed) free(grid);
     destroy_game(game);

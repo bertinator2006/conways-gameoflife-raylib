@@ -105,8 +105,7 @@ int main(int argc, char *argv[])
         {
             grid[cell.y * game_width + cell.x] = true;
         }
-        // draw the grid
-        
+
         BeginDrawing();
         {
             ClearBackground(WHITE);
@@ -131,10 +130,11 @@ int main(int argc, char *argv[])
         if (y != game_height - 1) append_char(buffer, '\n');
         fprintf(file, "%s", buffer);
     }
+
     fclose(file);
+    free(grid);
 
     CloseWindow();
-    free(grid);
     return 0;
 }
 

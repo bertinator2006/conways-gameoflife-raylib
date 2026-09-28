@@ -1,8 +1,9 @@
 #include <stdbool.h>
+#include <stdlib.h>
 #include <raylib.h>
 #include "draw.h"
 
-static void draw_cell(int x, int y, int cell_size_px);
+static void draw_cell(int x, int y, int cell_size_px, Color color);
 static void draw_bordered_cell(int x, int y, int cell_size_px);
 static void draw_vertical_line(int x, int height);
 static void draw_horizontal_line(int y, int width);
@@ -16,7 +17,7 @@ void draw_grid(bool *grid, int width, int height, int cell_size_px)
         {
             if (grid[i])
             {
-                draw_cell(x, y, cell_size_px);
+                draw_cell(x, y, cell_size_px, BLACK);
             }
             i++;
         }
@@ -63,8 +64,16 @@ static void draw_bordered_cell(int x, int y, int cell_size_px)
     DrawRectangle(posx, posy, cell_size_px, cell_size_px, BLACK);
 }
 
-static void draw_cell(int x, int y, int cell_size_px)
+static void draw_cell(int x, int y, int cell_size_px, Color color)
 {
-    DrawRectangle(x * cell_size_px, y * cell_size_px, cell_size_px, cell_size_px, BLACK);
+    // for randomly chosen colours per cell
+    // int choice = rand() % 18;
+    // Color colours[] = {
+    //     MAROON, ORANGE, DARKGREEN, DARKBLUE, DARKPURPLE, DARKBROWN,
+    //     RED, GOLD, LIME, BLUE, VIOLET, BROWN, PINK, YELLOW,
+    //     GREEN, SKYBLUE, PURPLE, BEIGE
+    // };
+    // DrawRectangle(x * cell_size_px, y * cell_size_px, cell_size_px, cell_size_px, colours[choice]);
+    DrawRectangle(x * cell_size_px, y * cell_size_px, cell_size_px, cell_size_px, color);
 }
 

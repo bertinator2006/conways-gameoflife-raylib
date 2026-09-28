@@ -1,10 +1,10 @@
 all: conway create
 
-create:
-	gcc create.c draw.c -o create -lraylib
+create: create.o draw.o
+	gcc create.o draw.o -o create -lraylib
 
-conway:
-	gcc main.c conway.c draw.c -o conway -lraylib
+conway: main.o conway.o draw.o
+	gcc main.o conway.o draw.o -o conway -lraylib
 
 clean:
 	rm conway create

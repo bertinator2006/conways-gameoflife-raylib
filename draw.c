@@ -40,6 +40,7 @@ void draw_grid_with_borders(bool *grid, int width, int height, int cell_size_px)
         draw_horizontal_line(y + y * cell_size_px, width + width * cell_size_px);
     }
     draw_horizontal_line(height + height * cell_size_px, width + width * cell_size_px);
+
     for (int x = 0; x < width; x++)
     {
         draw_vertical_line(x + x * cell_size_px, height + height * cell_size_px);

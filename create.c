@@ -28,7 +28,10 @@ static void append_char(char *buffer, char c);
 
 int main(int argc, char *argv[])
 {
-    int cell_size_px = 5;
+    char buffer[256];
+    printf("Size of each cell in pixels: ");
+    fgets(buffer, 255, stdin);
+    int cell_size_px = atoi(buffer);
     int game_width;
     int game_height;
     FILE *file;

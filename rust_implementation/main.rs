@@ -36,6 +36,7 @@ fn main() {
     assert!(pair.1, 17); // this is 17
 
     let pair2: (char, i32) = ('a', 17);
+    pair2.1 = 12;
 
     let (some_char, some_int) = ('a', 17);
     assert!(some_char, 'a');
